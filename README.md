@@ -32,14 +32,14 @@ I will add a google doc for us
 - Exploratory data analysis
 - Output: final training dataset
 
-### 2. Model Development
+### 2. Model Development (TODO)
 
 - Build neural network architecture on prepared dataset
 - Hyperparameter optimization via grid search on validation set
 - Temporal train-validation-test split (no look-ahead bias)
 - Output: trained model with optimal hyperparameters
 
-### 3. Betting Strategy Evaluation
+### 3. Betting Strategy Evaluation (TODO)
 
 - Obtain betting odds from [tennis-data.co.uk](http://www.tennis-data.co.uk/)
 - Aggregate bookmaker odds or select most popular bookmaker
