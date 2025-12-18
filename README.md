@@ -16,14 +16,12 @@ This project develops a neural network model to predict professional tennis matc
 | **Numerical Experiments** | Present benchmarks and preprocessing; detail performance measures; design and discuss experiments; compare with alternative methods |
 | **Conclusions** | Point to limitations; motivate future research directions |
 
-📄 **Shared writing document:** *[Google Doc link to be added]*
-
+I will add a google doc for us
 ---
 
 ## Code Structure
 
-### 1. Data Cleaning, Feature Engineering & EDA
-`/data_preparation/`
+### 1. Data Cleaning, Feature Engineering & EDA (DONE)
 
 - Clean raw ATP match data (1991–2025)
 - Engineer 79 features:
@@ -35,7 +33,6 @@ This project develops a neural network model to predict professional tennis matc
 - Output: final training dataset
 
 ### 2. Model Development
-`/model/`
 
 - Build neural network architecture on prepared dataset
 - Hyperparameter optimization via grid search on validation set
@@ -43,7 +40,6 @@ This project develops a neural network model to predict professional tennis matc
 - Output: trained model with optimal hyperparameters
 
 ### 3. Betting Strategy Evaluation
-`/evaluation/`
 
 - Obtain betting odds from [tennis-data.co.uk](http://www.tennis-data.co.uk/)
 - Aggregate bookmaker odds or select most popular bookmaker
