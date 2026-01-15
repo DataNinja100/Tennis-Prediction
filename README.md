@@ -51,24 +51,56 @@ Evaluated on 126 matches from the 2024 US Open using Pinnacle Sports closing odd
 | MLP (Error) | 66.1% | +0.88% | -4.80% |
 
 ## Repository Structure
-```
-├── CODE/
-│   ├── DATA/                   # Raw ATP match CSVs from Sackmann (1991–2024)
-│   ├── Final/
-│   │   ├── betting_order.csv   # Alignment file for test set to betting matches
-│   │   ├── order.csv           # Match ordering reference
-│   │   ├── test.csv            # Test set: 705 matches from 2024 US Open onwards
-│   │   └── usopen.csv          # 2024 US Open betting odds from Tennis-Data.co.uk
-│   ├── Data.ipynb              # EDA, feature engineering, train/test set creation
-│   ├── Log_Model.ipynb         # Logistic regression baseline (no hyperparameter tuning)
-│   ├── XGBoost.ipynb           # XGBoost with Optuna hyperparameter optimisation and CV
-│   ├── MLP.ipynb               # MLP with Optuna hyperparameter optimisation and CV
-│   └── Betting.ipynb           # Final evaluation: train on full set, test on 705, betting strategies on 126 US Open matches, 10 metrics across 5 models × 2 strategies
-├── .gitignore
-└── README.md
-```
+
+### 1. Data Cleaning, Feature Engineering & EDA (`CODE/Data.ipynb`)
+
+- Clean raw ATP match data (2003–2024)
+- Engineer 123 features:
+  - Surface-specific Elo ratings (Hard, Clay, Grass) with experience-adjusted K-factors and inactivity multipliers
+  - Multi-scale rolling statistics (windows: 3–2,000 matches)
+  - Head-to-head records overall and per-surface
+  - Form indicators across multiple time horizons
+- Exploratory data analysis
+- Output: train/test split datasets
+
+**Data files:**
+- `CODE/DATA/` — Raw ATP match CSVs from Sackmann (2003–2024)
+- `CODE/Final/test.csv` — Test set: 705 matches from 2024 US Open onwards
+- `CODE/Final/usopen.csv` — 2024 US Open betting odds from Tennis-Data.co.uk
+- `CODE/Final/order.csv`, `betting_order.csv` — Alignment files for test set to betting matches
 
 **Note:** `train.csv` is not included due to file size constraints. Run `Data.ipynb` to generate it.
+
+### 2. Model Development
+
+**Logistic Regression Baseline (`CODE/Log_Model.ipynb`)**
+- Standard L2-regularised logistic regression as benchmark
+- No hyperparameter tuning required
+
+**XGBoost (`CODE/XGBoost.ipynb`)**
+- Strong tabular data baseline for comparison
+- Two models optimised for log-loss and error-rate respectively
+- Optuna hyperparameter tuning with TimeSeriesSplit cross-validation
+- Evaluation metrics: log-loss, accuracy, Brier score, AUC
+
+**Neural Network / MLP (`CODE/MLP.ipynb`)**
+- Feedforward neural network with PyTorch
+- Architecture: 123 (input) → 256 → 256 → 256 → 256 → 1 (output) with ReLU activations and dropout
+- BCEWithLogitsLoss for numerically stable training
+- Two models optimised for log-loss and error-rate respectively
+- Optuna hyperparameter tuning (learning rate, weight decay, batch size, dropout rate, epochs) with TimeSeriesSplit cross-validation
+- Evaluation metrics: log-loss, accuracy, Brier score, AUC
+
+### 3. Betting Strategy Evaluation (`CODE/Betting.ipynb`)
+
+- Retrain all models on full training set with optimal hyperparameters
+- Evaluate prediction accuracy on 705-match test set
+- Obtain Pinnacle Sports closing odds for 2024 US Open (126 matches)
+- Test two strategies:
+  1. **Winner Prediction:** Fixed stake on model's predicted winner
+  2. **Threshold-Hedged:** Proportional stakes based on model probabilities, betting only when edge exceeds bookmaker margin
+- Evaluate across 10 metrics: ROI, Sharpe ratio, win rate, profit factor, max drawdown, MACE, volatility, etc.
+- Visualisations: equity curves, calibration plots, confusion matrices, profit distributions
 
 ## References
 
